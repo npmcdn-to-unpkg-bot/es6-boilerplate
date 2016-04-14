@@ -13,9 +13,9 @@
   ],
   "author": "Dav <dav@icarys.org>",
   "license": "ISC",
-  "repository" : {
-        "type": "git",
-        "url": "https://github.com/icarys29/es6-boilerplate.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/icarys29/es6-boilerplate.git"
   },
   "dependencies": {
     "babel": "^6.5.2",
@@ -25,10 +25,12 @@
   "devDependencies": {
     "babel-cli": "^6.7.5",
     "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-task-listing": "^1.0.1",
     "gulp-watch": "^4.3.5",
+    "nsp": "^2.3.0",
+    "retire": "^1.1.4",
     "rimraf": "^2.5.2",
     "run-sequence": "^1.1.5"
   }
 }
-
-
