@@ -28,6 +28,7 @@
     "gulp-clean": "^0.3.2",
     "gulp-task-listing": "^1.0.1",
     "gulp-watch": "^4.3.5",
+    "nsp": "^2.3.0",
     "retire": "^1.1.4",
     "rimraf": "^2.5.2",
     "run-sequence": "^1.1.5"
