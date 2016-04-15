@@ -1,18 +1,23 @@
 console.log("Starting server")
+import http from 'http';
 import express from 'express';
+import morgan from 'morgan';
 import routes from './routes/main.routes';
 
-const app = express();
+let app = express();
+app.server = http.createServer(app);
 
+app.set('port', process.env.PORT || 22222);
+app.use(morgan('combined'));
+app.use('/public', express.static( __dirname + '/public' ));
 app.use('/', routes);
 
+console.log(__dirname);
 // arrow functions
-const server = app.listen(3000, () => {
-	// destructuring
-  const {address, port} = server.address();
+app.server.listen(app.get('port'));
 
-  // string interpolation:
-  console.log(`Server listening at http://${address}:${port}`);
+app.server.on('listening', function() {
+  console.log('Express server started on port %s at %s', app.server.address().port, app.server.address().address);
 });
 
 export default app;
