@@ -5,8 +5,8 @@ const router = express.Router();
 // Arrow functions
 router.get('/', (req, res) => {
   //res.setHeader('content-type', 'text/plain')
-  //res.send('Hello World!! HIHIHI');
-  res.sendfile('./src/server/public/index.html');
+  res.send('<HTML><HEADER><BODY>Hello World!!</BODY></HEARDER></HTML>');
+  //res.sendFile('./src/client/index.html', {root: __dirname + });
 });
 // Exporting an object as the default import for this module
 export default router;

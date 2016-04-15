@@ -1,23 +1,15 @@
-console.log("Starting server")
-import http from 'http';
-import express from 'express';
-import morgan from 'morgan';
-import routes from './routes/main.routes';
+import config from './config/env';
+import app from './config/express';
 
-let app = express();
-app.server = http.createServer(app);
+let port = process.env.PORT || config.default.port
 
-app.set('port', process.env.PORT || 22222);
-app.use(morgan('combined'));
-app.use('/public', express.static( __dirname + '/public' ));
-app.use('/', routes);
+console.log(`Starting server on port ${port}`)
+let server = app.listen(port, () => {
+    app.emit('listening', null)
+});
 
-console.log(__dirname);
-// arrow functions
-app.server.listen(app.get('port'));
-
-app.server.on('listening', function() {
-  console.log('Express server started on port %s at %s', app.server.address().port, app.server.address().address);
+server.on('listening', function() {
+  console.log('Express server started on port %s at %s', server.address().port, server.address().address);
 });
 
 export default app;
