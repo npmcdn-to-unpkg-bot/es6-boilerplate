@@ -74,7 +74,6 @@ app.use((err, req, res, next) => {
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
     const err = new APIError('API not found', httpStatus.NOT_FOUND);
-    console.log(err);
     return next(err);
 });
 
@@ -89,15 +88,11 @@ if (config.env !== 'test') {
 
 // error handler, send stacktrace only during development
 app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
- 
-    console.log("SUPER COUCOU");
-    console.log(err.stack);
-    
     res.status(err.status).json({
         message: err.isPublic ? err.message : httpStatus[err.status],
         stack: config.default.env === 'development' ? err.stack : {}
     })
-    
+
     //res.send("<HTML><HEADER><BODY>PAGE NOT FOUND</BODY></HEARDER></HTML>")
 }
 );

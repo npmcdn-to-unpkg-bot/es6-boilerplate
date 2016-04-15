@@ -3,13 +3,12 @@ import app from './config/express';
 
 let port = process.env.PORT || config.default.port
 
-console.log(`Starting server on port ${port}`)
 let server = app.listen(port, () => {
     app.emit('listening', null)
 });
 
 server.on('listening', function() {
-  console.log('Express server started on port %s at %s', server.address().port, server.address().address);
+  console.log(`Express server started on port ${server.address().port} at ${server.address().address} (mode: ${config.default.env})`);
 });
 
 export default app;
