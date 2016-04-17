@@ -6,6 +6,9 @@ dist
 bower_components
 test/bower_components
 
+
+*.db
+
 # Logs
 logs
 *.log

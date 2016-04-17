@@ -12,8 +12,10 @@ import winstonInstance from './winston';
 import config from './env';
 import routes from '../routes';
 import APIError from '../helpers/APIError';
+import path from 'path';
 
 const app = express();
+
 
 if (config.default.env === 'development') {
     app.use(logger('dev'));
@@ -35,7 +37,7 @@ app.disable('x-powered-by');
 app.use(cors());
 
 // enable detailed API logging in dev env
-if (config.env === 'development') {
+if (config.default.env === 'development') {
     expressWinston.requestWhitelist.push('body');
     expressWinston.responseWhitelist.push('body');
     app.use(expressWinston.logger({
@@ -46,12 +48,13 @@ if (config.env === 'development') {
     }));
 }
 
+//static file server
+app.use('/', express.static( path.join( __dirname + '/../../../dist/' )));
+logger(__dirname + '/../../client/')
+console.log(__dirname + '../../src/client/')
 // mount all routes on /api path
 app.use('/api', routes);
 
-//static file server
-app.use('/', express.static( __dirname + '/public' ));
-logger(__dirname + '/public');
 
 
 
@@ -77,14 +80,14 @@ app.use((req, res, next) => {
     return next(err);
 });
 
-/*
+
 // log error in winston transports except when executing test suite
 if (config.env !== 'test') {
     app.use(expressWinston.errorLogger({
         winstonInstance
     }));
 }
-*/
+
 
 // error handler, send stacktrace only during development
 app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
