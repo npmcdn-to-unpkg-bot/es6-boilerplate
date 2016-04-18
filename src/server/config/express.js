@@ -50,8 +50,8 @@ if (config.default.env === 'development') {
 
 //static file server
 app.use('/', express.static( path.join( __dirname + '/../../../dist/' )));
-logger(__dirname + '/../../client/')
-console.log(__dirname + '../../src/client/')
+//logger( path.join(__dirname + '/../../client/') );
+console.log( path.join( __dirname + '/../../../dist/' ) );
 // mount all routes on /api path
 app.use('/api', routes);
 

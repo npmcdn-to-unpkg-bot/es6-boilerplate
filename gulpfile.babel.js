@@ -22,14 +22,18 @@ var ext_replace = require('gulp-ext-replace'),
   typescript = require('gulp-typescript'),
   imagemin = require('gulp-imagemin'),
   nodemon = require('gulp-nodemon'),
-  browserSync = require('browser-sync');
+  browserSync = require('browser-sync'),
+  debug = require('gulp-debug'),
+  clean = require('gulp-clean');
 
 var tsProject = typescript.createProject('tsconfig.json');
 
 gulp.task('build-vendor', function() {
+   
   return gulp.src([
     /* AnguLAR 2 required libraries */
     /* IE required polyfills, in this exact order */
+    /* 
     'node_modules/es6-shim/es6-shim.min.js',
     'node_modules/systemjs/dist/system-polyfills.js',
     'node_modules/angular2/es6/dev/src/testing/shims_for_IE.js',
@@ -38,11 +42,20 @@ gulp.task('build-vendor', function() {
     'node_modules/rxjs/bundles/Rx.js',
     'node_modules/angular2/bundles/angular2.js',
     'node_modules/angular2/bundles/router.dev.js',
-    'node_modules/angular2/bundles/http.js'
+    'node_modules/angular2/bundles/http.js' */
+    'src/client/assets/vendors/angular2/es6-shim.min.js',
+    'src/client/assets/vendors/angular2/system-polyfills.js',
+    'src/client/assets/vendors/angular2/shims_for_IE.js',
+    'src/client/assets/vendors/angular2/system.js',
+    'src/client/assets/vendors/angular2/typescript.js',
+    'src/client/assets/vendors/angular2/angular2-polyfills.js',
+    'src/client/assets/vendors/angular2/Rx.js',
+    'src/client/assets/vendors/angular2/angular2.dev.js'
   ])
+  .pipe(debug({title: 'vendors'}))
   .pipe(concat('vendors.js'))
   .pipe(rename({suffix: '.min'}))
-  .pipe(uglify())
+  //.pipe(uglify({mangle: false}))
   .pipe(gulp.dest('dist/'));
 });
 
@@ -73,7 +86,8 @@ gulp.task('build-img', function () {
 });
 
 gulp.task('build-static', function () {
-  return gulp.src(appDev + '**/*.{html|css}')
+  return gulp.src(appDev + '**/*.+(html|css|ts)')
+    .pipe(debug({title: 'Build-static'}))
     .pipe(gulp.dest(appProd));
 });
 
@@ -124,10 +138,21 @@ gulp.task('bs-reload', function() {
 
 gulp.task('watch', function () {
   //gulp.watch(appDev + '**/*.ts', ['build-ts', browserSync.reload]);
-  gulp.watch(appDev + '**/*.{html|css}', ['build-static', browserSync.reload]);
+  gulp.watch(appDev + '**/*.(html|css|ts)', ['build-static', browserSync.reload]);
   gulp.watch(appDev + '**/*.js', ['browserSync'.reload]);
   gulp.watch(assetsDev + 'styles/**/*.scss', ['build-css', browserSync.reload]);
   gulp.watch(assetsDev + 'img/*', ['build-img', browserSync.reload]);
+});
+
+
+gulp.task('clean-dist', () => {
+    return gulp.src(appProd, { read: false })
+        .pipe(clean());
+});
+
+gulp.task('purge', () => {
+    return gulp.src('node_modules', { read: false })
+        .pipe(clean());
 });
 
 gulp.task('default', ['build-vendor', 'build-css', 'build-static', 'build-font', 'watch', 'browser-sync']);
