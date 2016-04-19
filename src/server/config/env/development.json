@@ -1,0 +1,17 @@
+{
+    "env": "development",
+    //db: 'mongodb://localhost/express-mongoose-es6-rest-api-development',
+    "port": 3000,
+    "database": {
+        "client": "sqlite3",
+        "connection": {
+            "filename": "./src/server/db/server.db"
+        },
+        "seeds": {
+            "directory": "./src/server/db/seeds"
+        },
+        "migrations": {
+            "directory": "./src/server/db/migrations"
+        }
+    }
+}

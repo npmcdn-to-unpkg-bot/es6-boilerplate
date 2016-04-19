@@ -3,20 +3,20 @@ var app, options;
 var hooks = {};
 var modelMap = {};
 
-var kalamata = module.exports = function(_app_, _options_) {
+var apiGenerator = module.exports = function(_app_, _options_) {
     app = _app_;
     options = _options_;
-
-    app.use(bodyParser.json());
+    console.log(app.stack);
+    app.use( bodyParser.json() );
 
     if(!options) options = {};
     if(!options.apiRoot) options.apiRoot = '/';
     else options.apiRoot = '/' + options.apiRoot.replace(/^\/|\/$/g, '') + '/';
 
-    return kalamata;
+    return apiGenerator;
 };
 
-kalamata.expose = function(model, _opts_) {
+apiGenerator.expose = function(model, _opts_) {
 
     var validOpts = {
         identifier: true,
@@ -242,7 +242,7 @@ kalamata.expose = function(model, _opts_) {
     }
 
     function createHookFunction(fnName, prefix, type) {
-        kalamata[fnName] = hookFn(prefix, type, fnName);
+        apiGenerator[fnName] = hookFn(prefix, type, fnName);
     }
 
     function hookFn(prefix, type, fnName) {
@@ -334,6 +334,6 @@ kalamata.expose = function(model, _opts_) {
         return str.replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2": ');
     }
     console.log(hooks);
-    return kalamata;
+    return apiGenerator;
 
 };

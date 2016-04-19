@@ -1,0 +1,9 @@
+{
+    "port": 12345,
+    "env": "development",
+    "database": {
+        "connection": {
+            "filename": "toto"
+        }
+    }
+}

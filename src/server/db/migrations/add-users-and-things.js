@@ -1,6 +1,7 @@
 'use strict';
+import Promise from 'bluebird';
 
-exports.up = function(knex, Promise) {
+export function up(knex, Promise) {
     console.log("Create tables start")
     
     return Promise.all([
@@ -21,9 +22,11 @@ exports.up = function(knex, Promise) {
     ]);
 };
 
-exports.down = function(knex, Promise) {
+export function down(knex, Promise) {
     return Promise.all([
         knex.schema.dropTableIfExists('users'),
         knex.schema.dropTableIfExists('things')
     ]);
 };
+
+export default up;

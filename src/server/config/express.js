@@ -8,16 +8,23 @@ import cors from 'cors';
 import httpStatus from 'http-status';
 import expressWinston from 'express-winston';
 import expressValidation from 'express-validation';
-import winstonInstance from './winston';
-import config from './env';
+import path from 'path';
+import winstonInstance from '../helpers/winston';
 import routes from '../routes';
 import APIError from '../helpers/APIError';
-import path from 'path';
+import {default as models} from '../models';
+import {default as User} from '../models/user';
+import {default as Thing} from '../models/thing';
+import {default as conf} from './index.js';
+import {default as bookshelf} from '../db';
+
+
+console.log("Super model:" + models.default)
 
 const app = express();
 
 
-if (config.default.env === 'development') {
+if (conf.get('env') === 'development') {
     app.use(logger('dev'));
     console.log("Set Logger to DEV");
 }
@@ -37,7 +44,7 @@ app.disable('x-powered-by');
 app.use(cors());
 
 // enable detailed API logging in dev env
-if (config.default.env === 'development') {
+if (conf.get('env') === 'development') {
     expressWinston.requestWhitelist.push('body');
     expressWinston.responseWhitelist.push('body');
     app.use(expressWinston.logger({
@@ -50,13 +57,17 @@ if (config.default.env === 'development') {
 
 //static file server
 app.use('/', express.static( path.join( __dirname + '/../../../dist/' )));
-//logger( path.join(__dirname + '/../../client/') );
-console.log( path.join( __dirname + '/../../../dist/' ) );
+
 // mount all routes on /api path
 app.use('/api', routes);
 
 
 
+var api = require('../middlewares/apiGenerator')(app, { apiRoot: '/kalamata' });
+api.expose(User);
+api.expose(Thing);
+
+// ========
 
 
 // if error is not an instanceOf APIError, convert it.
@@ -82,7 +93,7 @@ app.use((req, res, next) => {
 
 
 // log error in winston transports except when executing test suite
-if (config.env !== 'test') {
+if (conf.get('env') !== 'test') {
     app.use(expressWinston.errorLogger({
         winstonInstance
     }));
@@ -93,7 +104,7 @@ if (config.env !== 'test') {
 app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
     res.status(err.status).json({
         message: err.isPublic ? err.message : httpStatus[err.status],
-        stack: config.default.env === 'development' ? err.stack : {}
+        stack: conf.get('env') === 'development' ? err.stack : {}
     })
 
     //res.send("<HTML><HEADER><BODY>PAGE NOT FOUND</BODY></HEARDER></HTML>")

@@ -1,6 +1,6 @@
 'use strict';
 
-exports.seed = function(knex, Promise) {
+export function seed(knex, Promise) {
     var userIds;
     return Promise.resolve().then(function() {
         return knex('things').del();
@@ -26,3 +26,5 @@ exports.seed = function(knex, Promise) {
         ]);
     });
 };
+
+export default seed
